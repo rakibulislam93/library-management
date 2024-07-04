@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{%load crispy_forms_tags%}
+{%block content%}
+
+
+
+<form method = 'post' class="w-50 m-auto mt-5" novalidate>
+    {%csrf_token%}
+    <!-- {{form|crispy}} -->
+    <div class="text-danger mb-4">
+        {%if form.non_field_errors%}
+        {%for error in form.non_field_errors%}
+        {{error}}
+        {%endfor%}
+        {%endif%}
+    </div>
+
+    {%for fm in form%}
+    
+    <span class="text-white">{{fm.label_tag}}</span>
+    {{fm}}
+    <span class="text-danger">{{fm.errors}}</span>
+    {%endfor%}
+
+    <button type="submit" class="btn btn-outline-warning text-primary mt-4" >Submit</button>
+</form>
+
+{%endblock%}

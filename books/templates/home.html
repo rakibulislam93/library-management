@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{%load static%}
+{%block content%}
+<style>
+    .card-body{
+        background-color:rgb(196, 178, 178);
+    }
+    .images{
+        width:100%;
+        
+    }
+</style>
+
+<div class="d-flex flex-wrap  align-items-center justify-content-between  mx-5 mt-5">
+
+    <div class="col-lg-6 col-sm-12 col-md-4 mt-5">
+      <h2 class="mb-5 text-primary">Welcome to Our Smart Library</h2>
+      <p style="color:white;">Welcome to our SMART LIBRARY, Libraries have been an essential part of human civilization for thousands of years, serving as repositories of knowledge and culture. They offer a vast array of resources, including books, magazines, newspapers, audio and video materials, and digital content. Libraries are more than just places to borrow books; they are community hubs that provide educational programs, cultural events, and access to technology.!</p>
+    </div >
+    <div class="col-lg-6 col-md-8">
+      <img src="{% static 'image.png' %} " alt="" class="w-100 mt-5">
+    </div>
+  
+</div>
+
+
+
+<h4 class="d-flex flex-wrap justify-content-center mt-5 text-primary">All Book Categories</h4>
+
+<div class="pb-5 pt-2 d-flex flex-wrap justify-content-center gap-3">
+{%for cat in category%}
+  
+<button class="btn btn-secondary"><a href="{% url 'category_wise_book' cat.slug %}" class="text-decoration-none text-white" >{{cat.name}}</a></button>
+{%endfor%}
+</div>
+
+<div class=" d-flex justify-content-center pb-4 text-white">
+{% if book %}
+      <h5>Total Book Found : {{ book|length }}</h5>
+{% else %}
+      <h4 class="text-danger">Sorry.! Book not found</h4>
+{% endif %}
+</div>
+
+<div class="d-flex flex-wrap gap-3  justify-content-center">
+    {%for bok in book%}
+
+    <div class="card" style="width: 18rem;">
+        <img src="{{bok.image.url}}" class="card-img-top images" alt="...">
+
+        <div class="card-body">
+            
+            <h5 class="card-title"><i>Title: {{bok.title}}</i></h5>
+            
+            <p class="card-text"><b>Description:</b> {{ bok.description|truncatewords:15 }}</p>
+            <h6><b>Borrow Price:</b> {{ bok.borrowing_price }}$ </h6>
+            
+            {% comment %} <a href="{% url 'detail_car' cr.id %}" class="btn btn-primary">View Details</a> {% endcomment %}
+            <a href="{% url 'book_details' bok.id %}" class="btn btn-primary">View Details</a>
+        </div>
+    </div>
+    
+    {%endfor%}
+</div>
+
+{%endblock%}

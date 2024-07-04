@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{%block content%}
+
+<style>
+    .card-body{
+        background-color: aqua;
+    }
+</style>
+
+<div class="mt-5 pt-5" >
+    {%if messages%}
+    {%for msg in messages%}
+    <h4 class="text-success mt-5 d-flex justify-content-center">{{msg}}</h4>
+    {%endfor%}
+    {%endif%}
+</div>
+
+<div class="d-flex flex-wrap m-2 justify-content-around mt-5 border mb-5 mx-5 shadow-none p-3 mb-5 bg-light rounded">
+    
+    <div>
+        <img style="width:500px;" src="{{book.image.url}}" class="card-img-top m-3 w-80" alt="...">
+    </div>
+    <div class="mt-3 mb-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <p class="card-title"><b>Title : {{book.title}} </b> </p>
+                <p class="card-title"><b>Description :</b> {{book.description|truncatewords:50}}</p>
+                <p class="card-title"><b>Borrow Price :</b> {{book.borrowing_price}}$</p>
+                {% if request.user.is_authenticated %}
+                    <p class="card-title"><b>Quantity :</b> {{book.quantity}} pis</p>
+                {%endif%}
+                <p><b>Categories : </b> <button class='btn btn-warning'>{{book.cetagory.name}}</button></p>
+                
+              {%if request.user.is_authenticated%}
+              <form method="post" action="{% url 'borrow_book' book.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Borrow Now</button>
+            </form>
+            {%endif%}
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="text-white mx-5">
+    <h2>Reviews</h2>
+    
+    
+        {% if book.reviews.all %}
+        <div class="reviews text-dark">
+            {% for review in book.reviews.all %}
+                <div class="review border rounded m-2 shadow-lg p-3 mb-5 bg-body rounded">
+                    <!-- <p><strong>{{ review.name }}</strong> rated it {{ review.rating }} stars</p> -->
+                     <p>Review by <b>{{review.name}} </b><small>{{review.review_date}}</small></p>
+                    <p>{{ review.body }}</p>
+                    <p>Ratting : <small>{{ review.rating }}</small></p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No reviews yet. Be the first to review this book!</p>
+    {% endif %}
+    
+
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'book_review' book.id  %}"><button type="submit" class="btn btn-outline-warning text-dark mb-3 mx-3 text-white"  >Add Review</button></a>
+    {%endif%}
+</div>
+
+
+
+
+
+{%endblock%}

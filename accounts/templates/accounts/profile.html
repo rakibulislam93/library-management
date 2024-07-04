@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{%load static%}
+{%block content%}
+
+<div class='p-4 mt-5 text-secondary'>
+  <h3>Hello ! {{user.username}}</h3>
+  <h5>Welcome to your profile..</h5>
+</div>
+<div class="text-center">
+  {%if messages%}
+  {%for msg in messages%}
+  <h5 class="text-success">{{msg}}</h5>
+  {%endfor%}
+  {%endif%}
+</div>
+<div class="d-flex flex-wrap  align-items-center justify-content-between  mx-5 mt-2">
+
+  <div class="col-6">
+    <h2 class="mb-5 text-primary">I'm a Simple Person Who Loves Books More and More</h2>
+    <p style="color:white;">"Books are not just stories; they are experiences that shape who I am. From the heart-wrenching tales of love and loss to the thrilling adventures of far-off lands, I lose myself in the pages, finding pieces of my own journey reflected in the characters and plots. For me, reading is more than a hobby; it's a passion that fuels my soul." !</p>
+  </div >
+  <img src="{% static 'hacker.jpg' %} " alt="" class="mt-5 col-6"style="width:20%">
+  
+</div>
+<div class="mx-5 mb-5">
+  <a href="{% url 'update_profile' user.id %}"><button class="btn btn-secondary">Update your Profile</button></a>
+  <a href="{% url 'pass_change' %}"><button class="btn btn-warning">Password Change</button></a>
+</div>
+
+<h2 class="text-center text-primary">All Of Your Borrowing Book List</h2>
+<table class="table table-bordered container mt-5 text-center text-white">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Book ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        <th scope="col">Borrow Date</th>
+        <th scope="col">Borrow Price</th>
+        <th scope="col">Actions</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in borrowed_books %}
+      <tr>
+        <td>{{ i.book.id }}</td>
+        <td>{{ i.book.title }}</td>
+        
+        <td>{{ i.book.cetagory.name }}</td>
+        <td>{{ i.book.description | truncatewords:15 }}</td>
+        <td>{{ i.borrow_date }}</td>
+        <td>{{ i.book.borrowing_price }}</td>
+        <td>
+          <form action="{% url 'return_book' i.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-warning">Return</button>
+          </form>
+        </td> 
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+{%endblock%}
